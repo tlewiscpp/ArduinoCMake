@@ -1,0 +1,1 @@
+avr-g++  -mmcu=atmega328 -DF_CPU=16000000 -DCMAKE_BUILD -I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino/ -Os   CMakeFiles/TestProject.dir/TestProject.ino.o  -o TestProject libArduinoCore.a 
