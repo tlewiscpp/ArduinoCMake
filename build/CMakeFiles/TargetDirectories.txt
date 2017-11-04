@@ -1,6 +1,0 @@
-/home/pinguinsan/Projects/ArduinoCMake/build/CMakeFiles/rebuild_cache.dir
-/home/pinguinsan/Projects/ArduinoCMake/build/CMakeFiles/edit_cache.dir
-/home/pinguinsan/Projects/ArduinoCMake/build/TestProject/CMakeFiles/rebuild_cache.dir
-/home/pinguinsan/Projects/ArduinoCMake/build/TestProject/CMakeFiles/edit_cache.dir
-/home/pinguinsan/Projects/ArduinoCMake/build/TestProject/CMakeFiles/ArduinoCore.dir
-/home/pinguinsan/Projects/ArduinoCMake/build/TestProject/CMakeFiles/TestProject.dir
