@@ -11,14 +11,16 @@ if (NOT ARDUINO_CORE_ROOT)
     endif()
 endif()
 
+set (USER_LIBRARY_ROOT "$ENV{HOME}/Arduino/libraries/")
 if (EXISTS ${ARDUINO_CORE_ROOT}/hardware/archlinux-arduino/avr/cores/arduino/)
     set (ARDUINO_CORE_SOURCES "${ARDUINO_CORE_ROOT}/hardware/archlinux-arduino/avr/cores/arduino/")
+    set (ARDUINO_LIBRARY_ROOT "${ARDUINO_CORE_ROOT}/hardware/archlinux-arduino/avr/libraries/")
 elseif (EXISTS ${ARDUINO_CORE_ROOT}/hardware/arduino/avr/cores/arduino/)
     set (ARDUINO_CORE_SOURCES "${ARDUINO_CORE_ROOT}/hardware/arduino/avr/cores/arduino/")
+    set (ARDUINO_LIBRARY_ROOT "${ARDUINO_CORE_ROOT}/hardware/arduino/avr/libraries/")
 else()
     message(FATAL_ERROR "Searched directories for arduino cores failed!")
 endif()
-
 
 set(BOARD_TYPE_TEMP ${ARDUINO_BOARD_TYPE})
 string(TOUPPER "${BOARD_TYPE_TEMP}" BOARD_TYPE)
@@ -33,9 +35,9 @@ if ("${BOARD_TYPE}" STREQUAL "UNO")
 elseif("${BOARD_TYPE}" STREQUAL "MEGA")
     set (ARDUINO_VARIANT_PINS_DIR "${ARDUINO_CORE_SOURCES}/../../variants/mega/")
     include(${ARDUINO_CORE_LIB_DIR}/ArduinoMegaCrossCompile.cmake)
-elseif("${BOARD_TYPE}" STREQUAL "LEONARDO")
+elseif( ("${BOARD_TYPE}" STREQUAL "LEONARDO") OR ("${BOARD_TYPE}" STREQUAL "LEO") )
     set (ARDUINO_VARIANT_PINS_DIR "${ARDUINO_CORE_SOURCES}/../../variants/leonardo/")
-    include(${ARDUINO_CORE_LIB_DIR}/arduino_leonardo_crosscompile.cmake)
+    include(${ARDUINO_CORE_LIB_DIR}/ArduinoLeonardoCrossCompile.cmake)
 else()
     message(FATAL_ERROR "Unsupported board type ${ARDUINO_BOARD_TYPE}")
 endif()
@@ -97,7 +99,14 @@ target_include_directories(${ARDUINO_CORE_PROJECT_NAME}
         PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC ${ARDUINO_CORE_ROOT}
         PUBLIC ${ARDUINO_CORE_SOURCES}
-        PUBLIC ${ARDUINO_VARIANT_PINS_DIR})
+        PUBLIC ${ARDUINO_VARIANT_PINS_DIR}
+        PUBLIC ${ARDUINO_LIBRARY_ROOT}/SPI/src/
+        PUBLIC ${ARDUINO_LIBRARY_ROOT}/HID/src/
+        PUBLIC ${ARDUINO_LIBRARY_ROOT}/Ethernet/src/
+        PUBLIC ${ARDUINO_LIBRARY_ROOT}/EEPROM/src/
+        PUBLIC ${ARDUINO_LIBRARY_ROOT}/SoftwareSerial/src/
+        PUBLIC ${ARDUINO_LIBRARY_ROOT}/Wire/src/
+        PUBLIC ${USER_LIBRARY_ROOT}/Ethernet/src)
 
 set_target_properties(${ARDUINO_CORE_PROJECT_NAME} PROPERTIES ENABLE_EXPORTS FALSE)
 
@@ -117,7 +126,13 @@ function(add_arduino_executable)
         set(${FUNC}_TARGET ${${FUNC}_UNPARSED_ARGUMENTS})
     endif()
 
+    file(GLOB ${FUNC}_SOURCES
+        "*.h"
+        "*.hpp"
+        "*.cpp")
+
     add_executable(${${FUNC}_TARGET}
+                    ${${FUNC}_SOURCES}
             ${${FUNC}_SOURCE_FILES})
 
     target_link_libraries(${${FUNC}_TARGET} ArduinoCore)
