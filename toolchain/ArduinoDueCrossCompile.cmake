@@ -1,0 +1,22 @@
+set(CMAKE_SYSTEM_NAME Generic)
+
+SET(CMAKE_C_COMPILER arm-none-eabi-gcc)
+SET(CMAKE_CXX_COMPILER arm-none-eabi-g++)
+
+SET(CSTANDARD "-std=gnu11")
+SET(CDEBUG "-ggdb")
+SET(CWARN "-Wall -Wstrict-prototypes")
+SET(CTUNING "-ffunction-sections -fdata-sections -fno-threadsafe-statics -fno-rtti -fno-exceptions")
+SET(COPT "-Os")
+SET(CINCS "-I${ARDUINO_CORE_SOURCES}/")
+SET(CMCU "-mmcu=atmega2560 -mcpu=cortex-m3 -mthumb")
+SET(CDEFS "-DF_CPU=84000000L -DARDUINO=10809 -DARDUINO_SAM_DUE -DARDUINO_ARCH_SAM -D__SAM3X8E__ -DCMAKE_BUILD")
+SET(USBDEFS "-DUSB_VID=0x2341 -DUSB_PID=0x003e -DUSBCON -DUSB_MANUFACTURER=\"Arduino LLC\" -DUSB_PRODUCT=\"Arduino Due\"")
+#set(AVRDUDE_ID "m2560")
+#set(UPLOAD_BAUD_RATE "115200")
+
+SET(CFLAGS "${CMCU} ${CDEBUG} ${CDEFS} ${USBDEFS} ${CINCS} ${COPT} ${CWARN} ${CSTANDARD} ${CEXTRA}")
+SET(CXXFLAGS "${CMCU} ${CDEFS} ${CINCS} ${COPT}")
+
+SET(CMAKE_C_FLAGS ${CFLAGS})
+SET(CMAKE_CXX_FLAGS ${CXXFLAGS})
